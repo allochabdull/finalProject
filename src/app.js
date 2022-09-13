@@ -18,8 +18,10 @@ export default class App {
     this.formHandler.initAdd();
   }
 
-  static disableForm = (inputs) => {
-    inputs.forEach((input) => {
+  static disableForm = () => {
+    const editForm = document.getElementById("edit-form");
+    const editInputs = editForm.querySelectorAll("input, select");
+    editInputs.forEach((input) => {
       if (input.type !== "radio" && input.type !== "checkbox") {
         input.value = "";
     } else {input.checked = false;}
@@ -50,6 +52,9 @@ export default class App {
       bg.classList.toggle("hidden");
       module.classList.toggle("hidden");
     }
+
+    this.toggleForm(true)
+    this.disableForm()
     toggleModule()
 
     let confirmHandler = () => {
@@ -76,30 +81,32 @@ export default class App {
     }
   }
 
-  static edit(user) {
-    this.formHandler.edit(user);
+  static toggleForm = (checkIfclosed) => {
+    const addForm = document.getElementById("add-form");
+    const editBtns = document.querySelectorAll(".edit-btn");
+    const activityOptions = document.getElementById("edit-activity-options");
     const editForm = document.getElementById("edit-form");
     const editInputs = editForm.querySelectorAll("input, select");
     const updateBtn = document.getElementById("update");
     const cancelEditBtn = document.getElementById("cancel-edit");
-    const addForm = document.getElementById("add-form");
-    const editBtns = document.querySelectorAll(".edit-btn");
-    const activityOptions = document.getElementById("edit-activity-options");
 
-    
-    
-    let toggleForm = () => {
-      editBtns.forEach((btn) => (btn.disabled != btn.disabled));
-      editInputs.forEach((input) => input.disabled = !input.disabled);
-      editForm.classList.toggle("tablet-hidden");
-      addForm.classList.toggle("tablet-hidden");
-      activityOptions.classList.toggle("disabled");
-      updateBtn.disabled = !updateBtn.disabled;
-      cancelEditBtn.disabled = !cancelEditBtn.disabled;
-    }
-    toggleForm()
+    if(checkIfclosed && updateBtn.disabled == true) {return}
 
+    editBtns.forEach((btn) => {btn.toggleAttribute('disabled')});
+    editInputs.forEach((input) => input.disabled = !input.disabled);
+    editForm.classList.toggle("tablet-hidden");
+    addForm.classList.toggle("tablet-hidden");
+    activityOptions.classList.toggle("disabled");
+    updateBtn.disabled = !updateBtn.disabled;
+    cancelEditBtn.disabled = !cancelEditBtn.disabled;
+  }
 
+  static edit(user) {
+    this.formHandler.edit(user);
+    const updateBtn = document.getElementById("update");
+    const cancelEditBtn = document.getElementById("cancel-edit");
+
+    this.toggleForm()
 
     let confirmEditListner = async (e) => {
       e.preventDefault();
@@ -111,8 +118,8 @@ export default class App {
       }
 
       let updatedUser = this.formHandler.generateUser("edit", user.id);
-      this.disableForm(editInputs);
-      toggleForm()
+      this.disableForm();
+      this.toggleForm()
 
       let toastId = ToastHandler.updateToast("loading", `we are updating the user ${user.firstName} ${user.lastName}, please hold!`);
 
@@ -126,8 +133,8 @@ export default class App {
     let cancelEditListner = (e) => {
       e.preventDefault();
       this.formHandler.validateForm('edit', true)
-      this.disableForm(editInputs);
-      toggleForm()
+      this.disableForm();
+      this.toggleForm()
     };
 
     updateBtn.onclick = confirmEditListner;
