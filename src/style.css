@@ -1,0 +1,454 @@
+/* Global styles */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  font-family: "poppins";
+}
+
+button,
+footer > ul > li {
+  cursor: pointer;
+}
+button {
+  border: 1px solid #686868;
+}
+
+header,
+footer > ul,
+.confirm-delete,
+.delete-btn,
+.form-line > button,
+.edit-actions > button,
+.toastMsg {
+  color: white;
+}
+
+.delete-btn,
+.confirm-delete {
+  background: #dd5a5a;
+}
+
+.edit-btn,
+.cancel-delete,
+#cancel-edit {
+  background: #d9d9d9;
+  color: #666363;
+}
+
+aside,
+.user-card,
+#main-section,
+#forms-container,
+.input,
+form,
+.edit-actions,
+.confirm-delete-module,
+.toast-msg-container,
+.form-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.sports-option > label,
+.option > label,
+form > h2 {
+  color: #3b95d7;
+}
+
+button, .toastMsg {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* header Styles */
+header {
+  width: 100%;
+  height: 85px;
+  background: #3b95d7;
+  display: flex;
+  align-items: center;
+  padding: 0 31px;
+  margin-bottom: 5px;
+}
+
+/* sidebar styles */
+aside {
+  height: 100%;
+  width: 400px;
+  background: rgba(59, 149, 215, 0.15);
+  padding: 13px 22px;
+  margin-right: 12px;
+  gap: 20px;
+  overflow: scroll;
+}
+
+.user-card {
+  width: 340px;
+  height: 128px;
+  background: rgba(86, 92, 78, 0.1);
+  border: 0.5px solid #565c4e;
+  border-radius: 10px;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.user-info-wrapper {
+  display: flex;
+  gap: 20px;
+}
+
+.user-icon {
+  width: 67px;
+  height: 64px;
+  border-radius: 50%;
+  line-height: 64px;
+  font-size: 36px;
+  font-weight: 600;
+  text-align: center;
+  color: #666363;
+  user-select: none;
+}
+
+.user-actions {
+  align-self: flex-end;
+  display: flex;
+  gap: 20px;
+}
+
+.user-actions > button {
+  width: 80px;
+  height: 23px;
+  font-weight: 600;
+}
+
+/* main section styles */
+main {
+  width: 100%;
+  height: calc(100% - 90px);
+  display: flex;
+}
+
+#main-section {
+  width: calc(100% - 412px);
+  align-items: center;
+  justify-content: space-between;
+}
+
+#forms-container {
+  width: 100%;
+  height: 100%;
+  gap: 15px;
+}
+
+.form-line {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.form-line:nth-of-type(1) {
+  width: 50%;
+}
+
+.form-line:nth-of-type(3) {
+  width: 75%;
+}
+
+.form-line:last-child {
+  justify-content: space-between;
+}
+
+.input {
+  flex: 1;
+  gap: 3px;
+}
+
+.input.address {
+  flex: 2;
+}
+
+.input.zip,
+.input.age {
+  flex: 0.3;
+}
+
+.sports-container {
+  height: 100px;
+  width: 75%;
+  border: 1px solid #3b95d7;
+  color: #3b95d7;
+  border-radius: 15px;
+  padding: 7px 13px;
+}
+
+form {
+  width: 100%;
+  height: 100%;
+  gap: 20px;
+  background: #d9d9d9;
+  padding: 20px 40px;
+}
+
+form > h2 {
+  position: relative;
+  height: 36px;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 36px;
+}
+
+form > h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: black;
+}
+
+.edit-actions {
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.form-line > button,
+.edit-actions > button {
+  width: 158px;
+  height: 30px;
+  background: #3b95d7;
+  align-self: flex-end;
+}
+
+.errHook {
+  color: red;
+  white-space: nowrap;
+}
+/* footer styling */
+footer {
+  width: 100%;
+  padding: 35px;
+  background: #3b95d7;
+}
+
+footer > ul {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 80px;
+}
+
+/* delete-module */
+.confirm-delete-bg {
+  background-color: rgba(217, 217, 217, 0.5);
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  z-index: 10;
+}
+
+.confirm-delete-module {
+  width: 40vw;
+  height: 30vh;
+  background-color: #d9d9d9;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+  align-items: center;
+  justify-content: space-around;
+  padding: 2%;
+  font-size: 2rem;
+  text-align: center;
+  border: 1px solid #3b95d7;
+}
+
+.delete-actions {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.delete-actions > button {
+  font-size: 1.2rem;
+  padding: 10px;
+}
+
+.form-content {
+  gap: 3px;
+}
+
+.line-wrapper {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+}
+
+.sports-option {
+  width: 20%;
+}
+
+input {
+  padding: 5px;
+}
+
+input[type="text"],
+input[type="number"],
+select,
+.activity-options {
+  border: none;
+  height: 25px;
+}
+
+.activity-options {
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.activity-options.disabled {
+  background: rgb(223, 223, 223);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sports-options {
+  margin-top: 10px;
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+/* toast Styles */
+.toast-msg-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  gap: 10px;
+  z-index: 9;
+}
+
+.toastMsg {
+  width: 300px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9;
+  padding: 20px;
+  text-align: center;
+  border-radius: 40px;
+  user-select: none;
+}
+
+.toastMsg.loading {
+  background-color: #e48847;
+}
+
+.errToast {
+  background-color: #dd5a5a;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Toast animation */
+@keyframes toastEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+@keyframes toastFade {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+.enter {
+  animation-name: toastEnter;
+  animation-duration: 0.4s;
+}
+
+.fade {
+  animation-name: toastFade;
+  animation-delay: 1s;
+  animation-duration: 4s;
+}
+
+@media screen and (max-width: 1024px) {
+  .tablet-hidden {
+    display: none;
+  }
+
+  .edit-actions {
+    width: 100%;
+    flex-direction: row-reverse;
+    justify-content: end;
+  }
+
+  .input.address {
+    min-width: 100%;
+  }
+  .form-content {
+    justify-content: space-between;
+    height: 100%;
+  }
+  .line-wrapper {
+    min-width: 100%;
+    flex-direction: row-reverse;
+    align-items: stretch;
+  }
+  .form-line {
+    flex-grow: 1;
+    align-items: center;
+  }
+
+  .form-line:last-child {
+    justify-content: end;
+  }
+  .sports-container,
+  .form-line:nth-of-type(1) {
+    width: 100%;
+  }
+  .sports-option {
+    width: 30%;
+  }
+
+  /* footer tablet styles */
+  footer {
+    padding: 20px;
+  }
+  footer > ul > li {
+    width: 40%;
+  }
+  footer > ul {
+    gap: 10px;
+    justify-content: center;
+  }
+}

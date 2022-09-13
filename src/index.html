@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sport club - members</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./app.js" defer type="module"></script>
+  </head>
+  <body>
+    <template id="user-template">
+      <div class="user-info-wrapper">
+        <div class="user-icon">A</div>
+        <div class="user-info">
+          <h4 class="user-name">John Doe Samuel</h4>
+          <h5 class="user-id">ID: 5634645</h5>
+          <h5 class="user-mail">john.doe@gmail.com</h5>
+        </div>
+      </div>
+      <div class="user-actions">
+        <button class="edit-btn">Edit</button>
+        <button class="delete-btn">Delete</button>
+      </div>
+    </template>
+
+    <div class="confirm-delete-bg hidden"></div>
+    <div class="confirm-delete-module hidden">
+      <div class="delete-msg"></div>
+      <div class="delete-actions">
+        <button class="cancel-delete" id="cancel">cancel</button>
+        <button class="confirm-delete" id="confirm">Confirm</button>
+      </div>
+    </div>
+    <div class="toast-msg-container"></div>
+
+    <header>
+      <h1>Sport club members</h1>
+    </header>
+    <main>
+      <aside>
+        <!-- <div class="user-card">
+                <div class="user-info-wrapper">
+                    <div class="user-icon">D</div>
+                    <div class="user-info">
+                        <h4 class="user-name">John Doe Samuel</h4>
+                        <h5 class="user-id">ID: 5634645</h5>
+                        <h5 class="user-mail">john.doe@gmail.com</h5>
+                    </div>
+                </div>
+                <div class="user-actions">
+                    <button class="edit-btn">Edit</button>
+                    <button class="delete-btn">Delete</button>
+                </div>
+            </div> -->
+      </aside>
+      <section id="main-section">
+        <div id="forms-container">
+          <form id="add-form">
+            <h2>Add new member</h2>
+            <div class="form-content">
+              <div class="form-line">
+                <div class="input">
+                  <label for="add-first-name">First name</label>
+                  <input type="text" id="add-first-name" />
+                  <div class="errHook"></div>
+                </div>
+                <div class="input">
+                  <label for="add-last-name">Last name</label>
+                  <input type="text" id="add-last-name" />
+                  <div class="errHook"></div>
+                </div>
+              </div>
+              <div class="form-line">
+                <div class="input address">
+                  <label for="add-address">Address</label>
+                  <input type="text" id="add-address" />
+                  <div class="errHook"></div>
+                </div>
+                <div class="line-wrapper">
+                  <div class="input zip">
+                    <label for="add-zip">Zip code</label>
+                    <input type="number" min="0" id="add-zip" />
+                    <div class="errHook"></div>
+                  </div>
+                  <div class="input">
+                    <label for="add-city">City</label>
+                    <input type="text" id="add-city" />
+                    <div class="errHook"></div>
+                  </div>
+                </div>
+                <div class="input">
+                  <label for="add-country">Country</label>
+                  <input type="text" id="add-country" />
+                  <div class="errHook"></div>
+                </div>
+              </div>
+              <div class="form-line">
+                <div class="line-wrapper">
+                  <div class="input">
+                    <label for="add-gender">Gender</label>
+                    <select id="add-gender">
+                      <option value="not-specified">not-specified</option>
+                      <option value="male">male</option>
+                      <option value="female">female</option>
+                    </select>
+                    <div class="errHook"></div>
+                  </div>
+                  <div class="input age">
+                    <label for="add-age">Age</label>
+                    <input type="number" min="0" max="99" id="add-age" />
+                    <div class="errHook"></div>
+                  </div>
+                </div>
+                <div class="input">
+                  <div id="add-activity">Activity class</div>
+                  <div class="activity-options">
+                    <div class="option">
+                      <input
+                        checked
+                        type="radio"
+                        data-title="professional"
+                        name="add-activity"
+                        id="add-professional"
+                      />
+                      <label for="professional">professional</label>
+                    </div>
+                    <div class="option">
+                      <input
+                        type="radio"
+                        data-title="amateur"
+                        name="add-activity"
+                        id="add-amateur"
+                      />
+                      <label for="amateur">amateur</label>
+                    </div>
+                  </div>
+                  <div class="errHook"></div>
+                </div>
+              </div>
+              <div class="form-line">
+                <div class="sports-container">
+                  <h4>Practiced sports</h4>
+                  <div class="sports-options">
+                    <div class="sports-option">
+
+                        <input
+                        type="checkbox"
+                        name="running"
+                        id="add-running"
+                        class="add-sports-option"
+                        />
+                        <label for="add-running">running</label>
+                        <div class="errHook"></div>
+                    </div>
+                    <div class="sports-option">
+
+                        <input
+                        type="checkbox"
+                        name="cycling"
+                        id="add-cycling"
+                        class="add-sports-option"
+                        />
+                        <label for="add-cycling">cycling</label>
+                    </div>
+                    <div class="sports-option">
+
+                        <input
+                        type="checkbox"
+                        name="swimming"
+                        id="add-swimming"
+                        class="add-sports-option"
+                        />
+                        <label for="add-swimming">swimming</label>
+                    </div>
+                    <div class="sports-option">
+
+                        <input
+                        type="checkbox"
+                        name="walking"
+                        id="add-walking"
+                        class="add-sports-option"
+                        />
+                        <label for="add-walking">walking</label>
+                    </div>
+                    <div class="sports-option">
+                        <input
+                        type="checkbox"
+                        name="skiing"
+                        id="add-skiing"
+                        class="add-sports-option"
+                        />
+                        <label for="add-skiing">skiing</label>
+                    </div>
+                  </div>
+                </div>
+                <button disabled id="save">Save</button>
+              </div>
+            </div>
+          </form>
+
+          <form id="edit-form" class="tablet-hidden">
+            <h2>Edit member</h2>
+            <div class="form-content">
+              <div class="form-line">
+                <div class="input">
+                  <label for="edit-first-name">First name</label>
+                  <input disabled type="text" id="edit-first-name" />
+                  <div class="errHook"></div>
+                </div>
+                <div class="input">
+                  <label for="edit-last-name">Last name</label>
+                  <input disabled type="text" id="edit-last-name" />
+                  <div class="errHook"></div>
+                </div>
+              </div>
+              <div class="form-line">
+                <div class="input address">
+                  <label for="edit-address">Address</label>
+                  <input disabled type="text" id="edit-address" />
+                  <div class="errHook"></div>
+                </div>
+                <div class="line-wrapper">
+                  <div class="input zip">
+                    <label for="edit-zip">Zip code</label>
+                    <input disabled type="number" min="0" id="edit-zip" />
+                    <div class="errHook"></div>
+                  </div>
+                  <div class="input">
+                    <label for="edit-city">City</label>
+                    <input disabled type="text" id="edit-city" />
+                    <div class="errHook"></div>
+                  </div>
+                </div>
+                <div class="input">
+                  <label for="edit-country">Country</label>
+                  <input disabled type="text" id="edit-country" />
+                  <div class="errHook"></div>
+                </div>
+              </div>
+              <div class="form-line">
+                <div class="line-wrapper">
+                  <div class="input">
+                    <label for="edit-gender">Gender</label>
+                    <select disabled id="edit-gender">
+                      <option value="not-specified">not-specified</option>
+                      <option value="male">male</option>
+                      <option value="female">female</option>
+                    </select>
+                    <div class="errHook"></div>
+                  </div>
+                  <div class="input age">
+                    <label for="edit-age">Age</label>
+                    <input
+                      disabled
+                      type="number"
+                      min="0"
+                      max="99"
+                      id="edit-age"
+                    />
+                    <div class="errHook"></div>
+                  </div>
+                </div>
+                <div class="input">
+                  <div>Activity class</div>
+                  <div
+                    class="activity-options disabled"
+                    id="edit-activity-options"
+                  >
+                    <div class="option">
+                      <input
+                        disabled
+                        type="radio"
+                        data-title="professional"
+                        name="edit-activity"
+                        id="edit-professional"
+                      />
+                      <label for="edit-professional">professional</label>
+                    </div>
+                    <div class="option">
+                      <input
+                        disabled
+                        type="radio"
+                        data-title="amateur"
+                        name="edit-activity"
+                        id="edit-amateur"
+                      />
+                      <label for="edit-amateur">amateur</label>
+                    </div>
+                    <div class="errHook"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-line">
+                <div class="sports-container">
+                  <h4>Practiced sports</h4>
+                  <div class="sports-options">
+                    <div class="sports-option">
+                        <input
+                        disabled
+                        type="checkbox"
+                        name="running"
+                        id="edit-running"
+                        class="edit-sports-option"
+                        />
+                        <label for="edit-running">running</label>
+                        <div class="errHook"></div>
+                    </div>
+                    <div class="sports-option">
+
+                        <input
+                        disabled
+                        type="checkbox"
+                        name="cycling"
+                        id="edit-cycling"
+                        class="edit-sports-option"
+                        />
+                        <label for="edit-cycling">cycling</label>
+                    </div>
+                    <div class="sports-option">
+
+                        <input
+                        disabled
+                        type="checkbox"
+                        name="swimming"
+                        id="edit-swimming"
+                        class="edit-sports-option"
+                        />
+                        <label for="edit-swimming">swimming</label>
+                    </div>
+                    <div class="sports-option">
+
+                        <input
+                        disabled
+                        type="checkbox"
+                        name="walking"
+                        id="edit-walking"
+                        class="edit-sports-option"
+                        />
+                        <label for="edit-walking">walking</label>
+                    </div>
+                    <div class="sports-option">
+
+                        <input
+                        disabled
+                        type="checkbox"
+                        name="skiing"
+                        id="edit-skiing"
+                        class="edit-sports-option"
+                        />
+                        <label for="edit-skiing">skiing</label>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="edit-actions">
+                  <button id="cancel-edit" disabled>cancel</button>
+                  <button id="update" disabled>update</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <footer>
+          <ul>
+            <li>Recent news</li>
+            <li>About Us</li>
+            <li>Services</li>
+            <li>Contact us</li>
+          </ul>
+        </footer>
+      </section>
+    </main>
+  </body>
+</html>
