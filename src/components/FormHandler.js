@@ -4,6 +4,28 @@ import App from "../app.js";
 import ToastHandler from "./ToastHandler.js";
 
 export default class FormHandler {
+  disableForm = (inputs) => {
+    inputs.forEach((input) => {
+      if (input.type !== "radio" && input.type !== "checkbox") {
+        input.value = "";
+      } else {input.checked = false;}
+    });
+  };
+
+  toggleForm = (checkIfclosed) => {
+    const hooks = DomHooks.generalHooks();
+
+    if (checkIfclosed && hooks.updateBtn.disabled == true) {return;}
+
+    hooks.editBtns.forEach((btn) => {btn.toggleAttribute("disabled");});
+    hooks.editInputs.forEach((input) => (input.disabled = !input.disabled));
+    hooks.editForm.classList.toggle("tablet-hidden");
+    hooks.addForm.classList.toggle("tablet-hidden");
+    hooks.activityOptions.classList.toggle("disabled");
+    hooks.updateBtn.disabled = hooks.updateBtn.toggleAttribute("disabled");
+    hooks.cancelEditBtn.disabled = hooks.cancelEditBtn.toggleAttribute("disabled");
+  };
+
   generateUser(action, userId) {
     const hooks = DomHooks.formHooks(action);
     let sportsList = [];

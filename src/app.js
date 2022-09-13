@@ -18,34 +18,14 @@ export default class App {
     this.formHandler.initAdd();
   }
 
-  static disableForm = (inputs) => {
-    inputs.forEach((input) => {
-      if (input.type !== "radio" && input.type !== "checkbox") {
-        input.value = "";
-      } else {input.checked = false;}
-    });
-  };
 
-  static toggleForm = (checkIfclosed) => {
-    const hooks = DomHooks.generalHooks();
-
-    if (checkIfclosed && hooks.updateBtn.disabled == true) {return;}
-
-    hooks.editBtns.forEach((btn) => {btn.toggleAttribute("disabled");});
-    hooks.editInputs.forEach((input) => (input.disabled = !input.disabled));
-    hooks.editForm.classList.toggle("tablet-hidden");
-    hooks.addForm.classList.toggle("tablet-hidden");
-    hooks.activityOptions.classList.toggle("disabled");
-    hooks.updateBtn.disabled = hooks.updateBtn.toggleAttribute("disabled");
-    hooks.cancelEditBtn.disabled = hooks.cancelEditBtn.toggleAttribute("disabled");
-  };
 
   static async add(newUser) {
     const hooks = DomHooks.generalHooks();
 
     let toastId = ToastHandler.updateToast("loading",`we are adding ${newUser.firstName} ${newUser.lastName} please hold!`);
     await this.fetch.callFetch("POST", "", newUser);
-    this.disableForm(hooks.addInputs);
+    this.formHandler.disableForm(hooks.addInputs);
     const newUsersList = await this.fetch.callFetch("GET", "");
     this.usersList.render(newUsersList);
     ToastHandler.updateToast("done",`the user ${newUser.firstName} ${newUser.lastName} has been added successfully!`,toastId);
@@ -61,8 +41,8 @@ export default class App {
       hooks.deleteModule.classList.toggle("hidden");
     };
 
-    this.toggleForm(true);
-    this.disableForm(hooks.editInputs);
+    this.formHandler.toggleForm(true);
+    this.formHandler.disableForm(hooks.editInputs);
     toggleModule();
 
     let confirmHandler = () => {
@@ -90,7 +70,7 @@ export default class App {
     this.formHandler.edit(user);
     const hooks = DomHooks.generalHooks();
 
-    this.toggleForm();
+    this.formHandler.toggleForm();
 
     let confirmEditHandler = async (e) => {
       e.preventDefault();
@@ -102,8 +82,8 @@ export default class App {
       }
 
       let updatedUser = this.formHandler.generateUser("edit", user.id);
-      this.disableForm(hooks.editInputs);
-      this.toggleForm();
+      this.formHandler.disableForm(hooks.editInputs);
+      this.formHandler.toggleForm();
 
       let toastId = ToastHandler.updateToast("loading",`we are updating the user ${user.firstName} ${user.lastName}, please hold!`);
       await this.fetch.callFetch("PUT", user.id, updatedUser);
@@ -114,8 +94,8 @@ export default class App {
     let cancelEditHandler = (e) => {
       e.preventDefault();
       this.formHandler.validateForm("edit", true);
-      this.disableForm(hooks.editInputs);
-      this.toggleForm();
+      this.formHandler.disableForm(hooks.editInputs);
+      this.formHandler.toggleForm();
     };
 
     hooks.updateBtn.onclick = confirmEditHandler;
