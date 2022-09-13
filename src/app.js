@@ -11,7 +11,6 @@ export default class App {
     this.formHandler = new FormHandler();
 
     let toastId = ToastHandler.updateToast("loading","we are loading the users list, please hold");
-
     const data = await this.fetch.callFetch("GET", "");
     this.usersList.render(data);
     ToastHandler.updateToast("done", "the users list is now loaded!", toastId);
@@ -19,14 +18,26 @@ export default class App {
     this.formHandler.initAdd();
   }
 
-  static disableForm = () => {
-    const hooks = DomHooks.generalHooks();
-
-    hooks.editInputs.forEach((input) => {
+  static disableForm = (inputs) => {
+    inputs.forEach((input) => {
       if (input.type !== "radio" && input.type !== "checkbox") {
         input.value = "";
       } else {input.checked = false;}
     });
+  };
+
+  static toggleForm = (checkIfclosed) => {
+    const hooks = DomHooks.generalHooks();
+
+    if (checkIfclosed && hooks.updateBtn.disabled == true) {return;}
+
+    hooks.editBtns.forEach((btn) => {btn.toggleAttribute("disabled");});
+    hooks.editInputs.forEach((input) => (input.disabled = !input.disabled));
+    hooks.editForm.classList.toggle("tablet-hidden");
+    hooks.addForm.classList.toggle("tablet-hidden");
+    hooks.activityOptions.classList.toggle("disabled");
+    hooks.updateBtn.disabled = hooks.updateBtn.toggleAttribute("disabled");
+    hooks.cancelEditBtn.disabled = hooks.cancelEditBtn.toggleAttribute("disabled");
   };
 
   static async add(newUser) {
@@ -51,7 +62,7 @@ export default class App {
     };
 
     this.toggleForm(true);
-    this.disableForm();
+    this.disableForm(hooks.editInputs);
     toggleModule();
 
     let confirmHandler = () => {
@@ -75,29 +86,13 @@ export default class App {
     }
   }
 
-  static toggleForm = (checkIfclosed) => {
-    const hooks = DomHooks.generalHooks();
-
-    if (checkIfclosed && hooks.updateBtn.disabled == true) {return;}
-
-    hooks.editBtns.forEach((btn) => {
-      btn.toggleAttribute("disabled");
-    });
-    hooks.editInputs.forEach((input) => (input.disabled = !input.disabled));
-    hooks.editForm.classList.toggle("tablet-hidden");
-    hooks.addForm.classList.toggle("tablet-hidden");
-    hooks.activityOptions.classList.toggle("disabled");
-    hooks.updateBtn.disabled = hooks.updateBtn.toggleAttribute("disabled");
-    hooks.cancelEditBtn.disabled = hooks.cancelEditBtn.toggleAttribute("disabled");
-  };
-
   static edit(user) {
     this.formHandler.edit(user);
     const hooks = DomHooks.generalHooks();
 
     this.toggleForm();
 
-    let confirmEditListner = async (e) => {
+    let confirmEditHandler = async (e) => {
       e.preventDefault();
       let status = this.formHandler.validateForm("edit");
 
@@ -107,7 +102,7 @@ export default class App {
       }
 
       let updatedUser = this.formHandler.generateUser("edit", user.id);
-      this.disableForm();
+      this.disableForm(hooks.editInputs);
       this.toggleForm();
 
       let toastId = ToastHandler.updateToast("loading",`we are updating the user ${user.firstName} ${user.lastName}, please hold!`);
@@ -116,15 +111,15 @@ export default class App {
       this.usersList.edit(user, updatedUser);
     };
 
-    let cancelEditListner = (e) => {
+    let cancelEditHandler = (e) => {
       e.preventDefault();
       this.formHandler.validateForm("edit", true);
-      this.disableForm();
+      this.disableForm(hooks.editInputs);
       this.toggleForm();
     };
 
-    hooks.updateBtn.onclick = confirmEditListner;
-    hooks.cancelEditBtn.onclick = cancelEditListner;
+    hooks.updateBtn.onclick = confirmEditHandler;
+    hooks.cancelEditBtn.onclick = cancelEditHandler;
   }
 }
 
