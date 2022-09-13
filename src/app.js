@@ -2,6 +2,7 @@ import Fetch from "./components/Fetch.js";
 import UsersList from "./components/UsersList.js";
 import FormHandler from "./components/FormHandler.js";
 import ToastHandler from "./components/ToastHandler.js";
+import DomHooks from "./components/DomHooks.js";
 
 export default class App {
   static async init() {
@@ -19,43 +20,39 @@ export default class App {
   }
 
   static disableForm = () => {
-    const editForm = document.getElementById("edit-form");
-    const editInputs = editForm.querySelectorAll("input, select");
-    editInputs.forEach((input) => {
+    const hooks = DomHooks.generalHooks();
+
+    hooks.editInputs.forEach((input) => {
       if (input.type !== "radio" && input.type !== "checkbox") {
         input.value = "";
-    } else {input.checked = false;}
+      } else {input.checked = false;}
     });
   };
 
   static async add(newUser) {
-    const addForm = document.getElementById("add-form");
-    const addInputs = addForm.querySelectorAll("input[type =text], input[type= number], input[type = checkbox], select");
+    const hooks = DomHooks.generalHooks();
 
-    let toastId = ToastHandler.updateToast("loading", `we are adding ${newUser.firstName} ${newUser.lastName} please hold!`);
+    let toastId = ToastHandler.updateToast("loading",`we are adding ${newUser.firstName} ${newUser.lastName} please hold!`);
     await this.fetch.callFetch("POST", "", newUser);
-    this.disableForm(addInputs)
+    this.disableForm(hooks.addInputs);
     const newUsersList = await this.fetch.callFetch("GET", "");
     this.usersList.render(newUsersList);
-    ToastHandler.updateToast("done", `the user ${newUser.firstName} ${newUser.lastName} has been added successfully!`,toastId);
+    ToastHandler.updateToast("done",`the user ${newUser.firstName} ${newUser.lastName} has been added successfully!`,toastId);
   }
 
   static async delete(user) {
-    const bg = document.querySelector(".confirm-delete-bg");
-    const module = document.querySelector(".confirm-delete-module");
-    const deleteOptions = document.querySelector(".delete-actions");
-    const deleteMsgHook = document.querySelector(".delete-msg");
+    const hooks = DomHooks.generalHooks();
 
-    deleteMsgHook.innerText = `Are you sure you want to delete this user: ${user.firstName} ${user.lastName}?`;
+    hooks.deleteMsgHook.innerText = `Are you sure you want to delete this user: ${user.firstName} ${user.lastName}?`;
 
     const toggleModule = () => {
-      bg.classList.toggle("hidden");
-      module.classList.toggle("hidden");
-    }
+      hooks.moduleBg.classList.toggle("hidden");
+      hooks.deleteModule.classList.toggle("hidden");
+    };
 
-    this.toggleForm(true)
-    this.disableForm()
-    toggleModule()
+    this.toggleForm(true);
+    this.disableForm();
+    toggleModule();
 
     let confirmHandler = () => {
       return new Promise((resolve) => {
@@ -63,50 +60,42 @@ export default class App {
           if (e.target.id == "confirm") resolve(true);
           else if (e.target.id == "cancel") resolve(false);
         };
-        deleteOptions.onclick = clickHandler;
-        bg.onclick = () => resolve(false);
+        hooks.deleteOptions.onclick = clickHandler;
+        hooks.moduleBg.onclick = () => resolve(false);
       });
     };
-
     let result = await confirmHandler();
-    toggleModule()
+    toggleModule();
 
     if (result) {
       let toastId = ToastHandler.updateToast("loading","sending delete request");
-
       await this.fetch.callFetch("delete", user.id);
       this.usersList.delete(user);
-
-      ToastHandler.updateToast("done", `the user "${user.firstName} ${user.lastName}" has been deleted successfully!`, toastId);
+      ToastHandler.updateToast("done",`the user "${user.firstName} ${user.lastName}" has been deleted successfully!`,toastId);
     }
   }
 
   static toggleForm = (checkIfclosed) => {
-    const addForm = document.getElementById("add-form");
-    const editBtns = document.querySelectorAll(".edit-btn");
-    const activityOptions = document.getElementById("edit-activity-options");
-    const editForm = document.getElementById("edit-form");
-    const editInputs = editForm.querySelectorAll("input, select");
-    const updateBtn = document.getElementById("update");
-    const cancelEditBtn = document.getElementById("cancel-edit");
+    const hooks = DomHooks.generalHooks();
 
-    if(checkIfclosed && updateBtn.disabled == true) {return}
+    if (checkIfclosed && hooks.updateBtn.disabled == true) {return;}
 
-    editBtns.forEach((btn) => {btn.toggleAttribute('disabled')});
-    editInputs.forEach((input) => input.disabled = !input.disabled);
-    editForm.classList.toggle("tablet-hidden");
-    addForm.classList.toggle("tablet-hidden");
-    activityOptions.classList.toggle("disabled");
-    updateBtn.disabled = !updateBtn.disabled;
-    cancelEditBtn.disabled = !cancelEditBtn.disabled;
-  }
+    hooks.editBtns.forEach((btn) => {
+      btn.toggleAttribute("disabled");
+    });
+    hooks.editInputs.forEach((input) => (input.disabled = !input.disabled));
+    hooks.editForm.classList.toggle("tablet-hidden");
+    hooks.addForm.classList.toggle("tablet-hidden");
+    hooks.activityOptions.classList.toggle("disabled");
+    hooks.updateBtn.disabled = hooks.updateBtn.toggleAttribute("disabled");
+    hooks.cancelEditBtn.disabled = hooks.cancelEditBtn.toggleAttribute("disabled");
+  };
 
   static edit(user) {
     this.formHandler.edit(user);
-    const updateBtn = document.getElementById("update");
-    const cancelEditBtn = document.getElementById("cancel-edit");
+    const hooks = DomHooks.generalHooks();
 
-    this.toggleForm()
+    this.toggleForm();
 
     let confirmEditListner = async (e) => {
       e.preventDefault();
@@ -119,26 +108,23 @@ export default class App {
 
       let updatedUser = this.formHandler.generateUser("edit", user.id);
       this.disableForm();
-      this.toggleForm()
+      this.toggleForm();
 
-      let toastId = ToastHandler.updateToast("loading", `we are updating the user ${user.firstName} ${user.lastName}, please hold!`);
-
+      let toastId = ToastHandler.updateToast("loading",`we are updating the user ${user.firstName} ${user.lastName}, please hold!`);
       await this.fetch.callFetch("PUT", user.id, updatedUser);
-
-      ToastHandler.updateToast("done", `the user ${user.firstName} ${user.lastName} has been successfully updated!`, toastId);
-
+      ToastHandler.updateToast("done",`the user ${user.firstName} ${user.lastName} has been successfully updated!`,toastId);
       this.usersList.edit(user, updatedUser);
     };
 
     let cancelEditListner = (e) => {
       e.preventDefault();
-      this.formHandler.validateForm('edit', true)
+      this.formHandler.validateForm("edit", true);
       this.disableForm();
-      this.toggleForm()
+      this.toggleForm();
     };
 
-    updateBtn.onclick = confirmEditListner;
-    cancelEditBtn.onclick = cancelEditListner
+    hooks.updateBtn.onclick = confirmEditListner;
+    hooks.cancelEditBtn.onclick = cancelEditListner;
   }
 }
 

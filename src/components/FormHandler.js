@@ -1,11 +1,11 @@
 import User from "./User.js";
-import FormHooks from "./FormHooks.js";
+import DomHooks from "./DomHooks.js";
 import App from "../app.js";
 import ToastHandler from "./ToastHandler.js";
 
 export default class FormHandler {
   generateUser(action, userId) {
-    const hooks = new FormHooks(action);
+    const hooks = DomHooks.formHooks(action);
     let sportsList = [];
     hooks.sportsHook.forEach((option) => {
       if (option.checked == true) sportsList.push(option.name);
@@ -26,7 +26,7 @@ export default class FormHandler {
   }
 
   validateForm(action, cancel) {
-    const hooks = new FormHooks(action);
+    const hooks = DomHooks.formHooks(action);
     let status = true;
 
     let errHooks = document.querySelectorAll(".errHook");
@@ -82,7 +82,7 @@ export default class FormHandler {
   }
 
   edit(user) {
-    const hooks = new FormHooks("edit");
+    const hooks = DomHooks.formHooks("edit");
     hooks.sportsHook.forEach((hook) => (hook.checked = false));
 
     hooks.fNameHook.value = user.firstName;
