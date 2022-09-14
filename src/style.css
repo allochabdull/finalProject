@@ -84,7 +84,7 @@ aside {
   padding: 13px 22px;
   margin-right: 12px;
   gap: 20px;
-  overflow: scroll;
+  overflow-y: auto;
 }
 
 .user-card {
